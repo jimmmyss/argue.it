@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Subtle dotted gray background pattern */
+  .bg-dot-pattern {
+    --dot-color: rgba(148, 163, 184, 0.25); /* slate-400 @ 25% */
+    --dot-size: 2px;
+    --dot-spacing: 28px;
+    background-color: #f3f4f6; /* gray-100 */
+    background-image: radial-gradient(var(--dot-color) var(--dot-size), transparent var(--dot-size));
+    background-size: var(--dot-spacing) var(--dot-spacing);
+    background-position: calc(var(--dot-spacing) / 2) calc(var(--dot-spacing) / 2);
+  }
+
+  /* Surface card that matches the dotted background theme */
+  .post-surface {
+    background-color: rgba(243, 244, 246, 0.8); /* gray-100/80 */
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+    border: 2px solid var(--dot-color, rgba(148, 163, 184, 0.25));
+    border-radius: 0.75rem; /* rounded-xl */
+  }
+
+  /* Reusable background color matching post surface (no border) */
+  .surface-bg {
+    background-color: rgba(243, 244, 246, 0.8);
+  }
+  /* Hide scrollbars globally */
+  html {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+  
+  html::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+  
+  * {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+  
+  *::-webkit-scrollbar {
+    display: none; /* WebKit */
+  }
+
+  body {
+    @apply font-sans antialiased bg-gray-50 text-gray-900 transition-colors duration-200;
+  }
+  
+  .dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply btn bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500;
+  }
+  
+  .dark .btn-secondary {
+    @apply bg-gray-700 text-gray-100 hover:bg-gray-600;
+  }
+  
+  .btn-success {
+    @apply btn bg-success-600 text-white hover:bg-success-700 focus:ring-success-500;
+  }
+  
+  .btn-danger {
+    @apply btn bg-danger-600 text-white hover:bg-danger-700 focus:ring-danger-500;
+  }
+  
+  .btn-outline {
+    @apply btn border-2 border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500;
+  }
+  
+  .dark .btn-outline {
+    @apply border-gray-600 text-gray-300 hover:bg-gray-800;
+  }
+  
+  .input {
+    @apply block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-primary-500 focus:border-primary-500 bg-white text-gray-900;
+  }
+  
+  .dark .input {
+    @apply bg-gray-800 border-gray-600 text-gray-100 placeholder-gray-400;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200;
+  }
+  
+  .dark .card {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .vote-bar {
+    @apply h-2 rounded-full transition-all duration-300;
+  }
+  
+  .vote-button {
+    @apply px-6 py-2 rounded-full font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+  
+  .vote-button-yes {
+    @apply vote-button bg-success-100 text-success-700 hover:bg-success-200 focus:ring-success-500;
+  }
+  
+  .vote-button-yes.active {
+    @apply bg-success-600 text-white hover:bg-success-700;
+  }
+  
+  .vote-button-no {
+    @apply vote-button bg-danger-100 text-danger-700 hover:bg-danger-200 focus:ring-danger-500;
+  }
+  
+  .vote-button-no.active {
+    @apply bg-danger-600 text-white hover:bg-danger-700;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
