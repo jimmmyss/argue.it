@@ -16,13 +16,17 @@ const reportRoutes = require('../routes/reports');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Initialize Firebase
+// Initialize Firebase with better error handling
+let firebaseReady = false;
 try {
   initializeFirebase();
+  firebaseReady = true;
+  console.log('🔥 Firebase initialized successfully');
 } catch (error) {
-  console.error('Failed to initialize Firebase:', error);
+  console.error('Failed to initialize Firebase:', error.message);
   console.warn('⚠️  Server will continue in demo mode');
   console.warn('⚠️  Some features may not work without proper Firebase configuration');
+  firebaseReady = false;
 }
 
 // Security middleware
@@ -71,6 +75,21 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Environment check (for debugging)
+app.get('/api/env-check', (req, res) => {
+  res.json({
+    status: 'Environment Check',
+    environment: process.env.NODE_ENV,
+    port: process.env.PORT,
+    corsOrigin: process.env.CORS_ORIGIN,
+    hasFirebaseAccount: !!process.env.FIREBASE_SERVICE_ACCOUNT,
+    hasFirebaseUrl: !!process.env.FIREBASE_DATABASE_URL,
+    rateLimitWindow: process.env.RATE_LIMIT_WINDOW_MS,
+    rateLimitMax: process.env.RATE_LIMIT_MAX_REQUESTS,
+    rateLimitPost: process.env.RATE_LIMIT_POST_MAX
+  });
+});
+
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../../client/build')));
@@ -112,11 +131,14 @@ app.use('*', (req, res) => {
   });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`🌐 Server accessible on all network interfaces`);
-  console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`🔥 Firebase initialized successfully`);
-});
+// For local development only
+if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌐 Server accessible on all network interfaces`);
+    console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`🔥 Firebase initialized successfully`);
+  });
+}
 
 module.exports = app;
